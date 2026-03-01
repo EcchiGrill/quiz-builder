@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { QuizModule } from './models/quiz/quiz.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [QuizModule],
+  imports: [PrismaModule, QuizModule],
 })
 export class AppModule {}
