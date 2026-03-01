@@ -1,7 +1,7 @@
 import './globals.css';
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
+import { ReactNode } from 'react';
 import { Work_Sans } from 'next/font/google';
-import type { ReactNode } from 'react';
 
 const workSans = Work_Sans({
   variable: '--font-work-sans',
