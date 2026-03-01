@@ -1,5 +1,3 @@
-'use client';
-
 import { Header } from '@/components/Header';
 import { QuizzesList } from '@/components/QuizzesList';
 import Box from '@mui/material/Box';

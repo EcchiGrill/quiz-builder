@@ -13,9 +13,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 import { ConfirmationModal } from './ConfirmationModal';
 import { useQuizStore } from '@/store/quizStore';
+import Stack from '@mui/material/Stack';
+import { formatQuestionsLabel } from '@/lib/utils/formatQuestionsLabel';
+import Chip from '@mui/material/Chip';
 
 export const QuizCard = (quiz: Quiz) => {
-  const { id, title, description, coverUrl } = quiz;
+  const { id, title, description, coverUrl, questions } = quiz;
 
   const router = useRouter();
   const removeQuiz = useQuizStore((state) => state.removeQuiz);
@@ -42,10 +45,18 @@ export const QuizCard = (quiz: Quiz) => {
             image={coverUrl ?? ''}
           />
           <CardContent>
-            <Typography variant="subtitle1">{title}</Typography>
-            <Typography variant="body2" color="text.secondary">
-              {description}
-            </Typography>
+            <Stack gap={1}>
+              <Typography variant="subtitle1">{title}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {description}
+              </Typography>
+              <Chip
+                label={formatQuestionsLabel(questions)}
+                size="small"
+                sx={{ alignSelf: 'flex-start' }}
+                variant="outlined"
+              />
+            </Stack>
           </CardContent>
         </CardActionArea>
         <IconButton

@@ -10,7 +10,6 @@ interface QuizState {
   setQuizzes: (quizzes: Quiz[]) => void;
   getQuizzes: () => Promise<void>;
   createQuiz: (quiz: Quiz) => Promise<void>;
-  getQuiz: (id: string) => Promise<void>;
   removeQuiz: (id: string) => Promise<void>;
   uploadCover: (id: string, file: File) => Promise<void>;
 }
@@ -45,20 +44,6 @@ export const useQuizStore = create<QuizState>()((set, get) => ({
     try {
       const newQuiz = await quizService.createQuiz(quiz);
       set({ quizzes: [...quizzes, newQuiz] });
-    } catch (error) {
-      return Promise.reject(error);
-    } finally {
-      set({ isLoading: false });
-    }
-  },
-
-  getQuiz: async (id: string) => {
-    const { quizzes } = get();
-    set({ isLoading: true });
-
-    try {
-      const quiz = await quizService.getQuiz(id);
-      set({ quizzes: [...quizzes, quiz] });
     } catch (error) {
       return Promise.reject(error);
     } finally {

@@ -18,21 +18,22 @@ import {
   ApiConsumes,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage, FileFilterCallback } from 'multer';
+import { memoryStorage } from 'multer';
+import type { FileFilterCallback } from 'multer';
 import type { Express } from 'express';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
+import { CloudinaryService } from '../../cloudinary/cloudinary.service';
 
 const mimeRegex = /^image\/(jpeg|png|gif|webp)$/;
 const maxFileSize = 5 * 1024 * 1024; // 5MB
 
 const imageFilter = (
-  _req: Request,
+  _req: Express.Request,
   file: Express.Multer.File,
   callback: FileFilterCallback
 ) => {
   const allowedFormat = mimeRegex.test(file.mimetype);
-
   if (allowedFormat) {
     callback(null, true);
   } else {
@@ -44,17 +45,15 @@ const imageFilter = (
   }
 };
 
-const storage = diskStorage({
-  destination: './uploads',
-  filename: (_, file, callback) => {
-    callback(null, `${Date.now()}-${file.originalname}`);
-  },
-});
+const upload = memoryStorage();
 
 @ApiTags('Quizzes')
 @Controller('quizzes')
 export class QuizController {
-  constructor(private readonly quizService: QuizService) {}
+  constructor(
+    private readonly quizService: QuizService,
+    private readonly cloudinaryService: CloudinaryService
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new quiz' })
@@ -78,7 +77,7 @@ export class QuizController {
   @Post(':id/upload-cover')
   @UseInterceptors(
     FileInterceptor('cover', {
-      storage,
+      storage: upload,
       limits: { fileSize: maxFileSize },
       fileFilter: imageFilter,
     })
@@ -111,8 +110,11 @@ export class QuizController {
         'No file uploaded. Use field name "cover".'
       );
     }
-    const url = `/api/uploads/${file.filename}`;
-    return this.quizService.uploadCover(id, url);
+    const { secure_url } = await this.cloudinaryService.uploadFromBuffer(
+      file.buffer,
+      file.mimetype
+    );
+    return this.quizService.uploadCover(id, secure_url);
   }
 
   @Delete(':id')
