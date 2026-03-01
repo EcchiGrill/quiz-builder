@@ -1,10 +1,14 @@
 services:
-  quiz-builder-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  quiz-builder:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: postgres
     ports:
-      - '4200:4200'
-    env_file:
-      - .env
-    depends_on: []
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data: {}
