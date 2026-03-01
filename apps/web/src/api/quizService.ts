@@ -5,7 +5,7 @@ import { Question } from '@/types/question';
 interface CreateQuizBody {
   title: string;
   description: string;
-  questions: Question[];
+  questions: Omit<Question, 'id'>[];
 }
 
 export class QuizService {

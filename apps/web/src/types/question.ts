@@ -1,6 +1,8 @@
+export type QuestionType = 'boolean' | 'input' | 'checkbox';
+
 export interface Question {
   id: string;
   name: string;
-  type: 'boolean' | 'input' | 'checkbox';
+  type: QuestionType;
   answers: string;
 }

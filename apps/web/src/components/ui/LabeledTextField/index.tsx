@@ -24,11 +24,7 @@ export const LabeledTextfield = ({
   const shouldReserveSpace = reserveErrorSpace || error;
 
   return (
-    <FormControl
-      fullWidth
-      error={error}
-      sx={{ '& .MuiInputBase-root': { maxWidth: '440px' } }}
-    >
+    <FormControl fullWidth error={error}>
       <Box>
         <StyledInputLabel htmlFor={id} required={required} shrink>
           {label}
