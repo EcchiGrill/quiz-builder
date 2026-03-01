@@ -1,16 +1,35 @@
-import { getQuizzesOptions } from '@/api/quizzes/getQuizzesOptions';
-import { getQueryClient } from '@/lib/utils/getQueryClient';
-import Typography from '@mui/material/Typography';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+'use client';
 
-const queryClient = getQueryClient();
-await queryClient.prefetchQuery(getQuizzesOptions());
+import { Header } from '@/components/Header';
+import { QuizzesList } from '@/components/QuizzesList';
+import Box from '@mui/material/Box';
+import { headerHeight } from '@/constants/headerHeight';
+import { Loader } from '@/components/ui/Loader';
+import { Suspense } from 'react';
 
 const QuizzesPage = () => {
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Typography variant="h1">Quizzes</Typography>
-    </HydrationBoundary>
+    <>
+      <Header currentPage="quizzes" />
+      <Box
+        sx={{ padding: '20px 30px', height: `calc(100vh - ${headerHeight})` }}
+      >
+        <Suspense
+          fallback={
+            <Loader
+              size={100}
+              sx={{
+                margin: 'auto',
+                display: 'block',
+                mt: 30,
+              }}
+            />
+          }
+        >
+          <QuizzesList />
+        </Suspense>
+      </Box>
+    </>
   );
 };
 

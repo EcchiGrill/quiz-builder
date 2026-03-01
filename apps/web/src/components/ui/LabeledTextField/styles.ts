@@ -1,7 +1,7 @@
 import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
-import { styled, type Theme } from '@mui/material/styles';
+import { styled, Theme } from '@mui/material/styles';
 
 export const StyledInputLabel = styled(InputLabel)(
   ({ theme }: { theme: Theme }) => ({
